@@ -241,7 +241,7 @@ const result = await generator.generateFromDescription(
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/n8n-make-bridge.git
+git clone https://github.com/Ununp3ntium115/n8n-make-bridge.git
 cd n8n-make-bridge
 
 # Run installer (includes configuration wizard)
@@ -403,8 +403,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📬 Support
 
 - 📖 [Documentation](COMPLETE_SETUP_GUIDE.md)
-- 💬 [Issues](https://github.com/yourusername/n8n-make-bridge/issues)
-- 🌟 [Star this repo](https://github.com/yourusername/n8n-make-bridge)
+- 💬 [Issues](https://github.com/Ununp3ntium115/n8n-make-bridge/issues)
+- 🌟 [Star this repo](https://github.com/Ununp3ntium115/n8n-make-bridge)
 
 ---
 
@@ -433,6 +433,6 @@ npm run build             # Build project
 
 **Built with ❤️ for the automation community**
 
-[⭐ Star on GitHub](https://github.com/yourusername/n8n-make-bridge) • [📖 Read the Docs](COMPLETE_SETUP_GUIDE.md) • [🐛 Report Bug](https://github.com/yourusername/n8n-make-bridge/issues)
+[⭐ Star on GitHub](https://github.com/Ununp3ntium115/n8n-make-bridge) • [📖 Read the Docs](COMPLETE_SETUP_GUIDE.md) • [🐛 Report Bug](https://github.com/Ununp3ntium115/n8n-make-bridge/issues)
 
 </div>
