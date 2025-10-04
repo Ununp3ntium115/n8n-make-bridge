@@ -1,0 +1,42 @@
+{
+  "name": "n8n-make-bridge",
+  "version": "1.0.0",
+  "description": "API bridge for translating workflows between n8n and Make.com",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "dev:mcp": "tsx src/mcp/server.ts",
+    "dev:cli": "tsx src/cli.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:mcp": "node dist/mcp/server.js",
+    "start:cli": "node dist/cli.js",
+    "cli": "node dist/cli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "n8n-make-mcp": "dist/mcp/server.js"
+  },
+  "keywords": [
+    "n8n",
+    "make",
+    "automation",
+    "workflow",
+    "integration"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.6.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.19.1",
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "zod": "^3.25.76"
+  }
+}
