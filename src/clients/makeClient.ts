@@ -751,4 +751,423 @@ export class MakeClient {
   async deleteVariable(variableId: string): Promise<void> {
     await this.client.delete(`/variables/${variableId}`);
   }
+
+  // ============================================
+  // Affiliate (Commission Tracking)
+  // ============================================
+
+  /**
+   * Get affiliate commission stats
+   */
+  async getAffiliateStats(options?: {
+    dateFrom?: string; // YYYY-MM-DD
+    dateTo?: string;
+  }): Promise<any> {
+    const params: any = {};
+    if (options?.dateFrom) params.dateFrom = options.dateFrom;
+    if (options?.dateTo) params.dateTo = options.dateTo;
+
+    const response = await this.client.get('/affiliate/stats', { params });
+    return response.data;
+  }
+
+  /**
+   * Get affiliate commissions
+   */
+  async getAffiliateCommissions(options?: {
+    statusId?: number;
+    dateFrom?: string;
+    dateTo?: string;
+    sortBy?: string;
+    sortDir?: 'asc' | 'desc';
+    limit?: number;
+    offset?: number;
+  }): Promise<any> {
+    const params: any = {};
+    if (options?.statusId) params.statusId = options.statusId;
+    if (options?.dateFrom) params.dateFrom = options.dateFrom;
+    if (options?.dateTo) params.dateTo = options.dateTo;
+    if (options?.sortBy) params['pg[sortBy]'] = options.sortBy;
+    if (options?.sortDir) params['pg[sortDir]'] = options.sortDir;
+    if (options?.limit) params['pg[limit]'] = options.limit;
+    if (options?.offset) params['pg[offset]'] = options.offset;
+
+    const response = await this.client.get('/affiliate/commissions', { params });
+    return response.data;
+  }
+
+  /**
+   * Get affiliate commission info
+   */
+  async getAffiliateCommissionInfo(options?: {
+    dateFrom?: string;
+    dateTo?: string;
+  }): Promise<any> {
+    const params: any = {};
+    if (options?.dateFrom) params.dateFrom = options.dateFrom;
+    if (options?.dateTo) params.dateTo = options.dateTo;
+
+    const response = await this.client.get('/affiliate/commission-info', { params });
+    return response.data;
+  }
+
+  /**
+   * Request affiliate payout
+   */
+  async requestAffiliatePayout(): Promise<any> {
+    const response = await this.client.post('/affiliate/payout-request');
+    return response.data;
+  }
+
+  // ============================================
+  // Agents (On-Premise Agents)
+  // ============================================
+
+  /**
+   * List agents
+   */
+  async getAgents(organizationId: number): Promise<any> {
+    const response = await this.client.get('/agents', {
+      params: { organizationId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Get agent details
+   */
+  async getAgent(agentId: string, organizationId: number): Promise<any> {
+    const response = await this.client.get(`/agents/${agentId}`, {
+      params: { organizationId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Create agent
+   */
+  async createAgent(agentId: string, name: string, organizationId: number): Promise<any> {
+    const response = await this.client.post(`/agents/${agentId}`,
+      { name },
+      { params: { organizationId } }
+    );
+    return response.data;
+  }
+
+  /**
+   * Update agent
+   */
+  async updateAgent(agentId: string, name: string, organizationId: number): Promise<any> {
+    const response = await this.client.patch(`/agents/${agentId}`,
+      { name },
+      { params: { organizationId } }
+    );
+    return response.data;
+  }
+
+  /**
+   * Delete agent
+   */
+  async deleteAgent(agentId: string, organizationId: number): Promise<any> {
+    const response = await this.client.delete(`/agents/${agentId}`, {
+      params: { organizationId }
+    });
+    return response.data;
+  }
+
+  // ============================================
+  // AI Agents (Beta)
+  // ============================================
+
+  /**
+   * Get AI agents
+   */
+  async getAIAgents(teamId: number): Promise<any> {
+    const response = await this.client.get('/ai-agents/v1/agents', {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Create AI agent
+   */
+  async createAIAgent(teamId: number, data: {
+    name: string;
+    teamId: number;
+    makeConnectionId: number;
+    defaultModel: string;
+    systemPrompt: string;
+    llmConfig?: any;
+    scenarios?: any[];
+    historyConfig?: any;
+    mcpConfigs?: any[];
+    contexts?: any[];
+    outputParserFormat?: any;
+  }): Promise<any> {
+    const response = await this.client.post('/ai-agents/v1/agents', data, {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Get AI agent by ID
+   */
+  async getAIAgent(agentId: string, teamId: number): Promise<any> {
+    const response = await this.client.get(`/ai-agents/v1/agents/${agentId}`, {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Delete AI agent
+   */
+  async deleteAIAgent(agentId: string, teamId: number): Promise<void> {
+    await this.client.delete(`/ai-agents/v1/agents/${agentId}`, {
+      params: { teamId }
+    });
+  }
+
+  /**
+   * Update AI agent
+   */
+  async updateAIAgent(agentId: string, teamId: number, data: {
+    name?: string;
+    systemPrompt?: string;
+    defaultModel?: string;
+    llmConfig?: any;
+    invocationConfig?: any;
+    scenarios?: any[];
+    historyConfig?: any;
+    mcpConfigs?: any[];
+    outputParserFormat?: any;
+  }): Promise<void> {
+    await this.client.patch(`/ai-agents/v1/agents/${agentId}`, data, {
+      params: { teamId }
+    });
+  }
+
+  /**
+   * Run AI agent
+   */
+  async runAIAgent(agentId: string, teamId: number, data: {
+    messages: any[];
+    threadId?: string;
+    callbackUrl?: string;
+    config?: any;
+  }): Promise<any> {
+    const response = await this.client.post(`/ai-agents/v1/agents/${agentId}/run`, data, {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Run AI agent with streaming (SSE)
+   */
+  async runAIAgentStream(agentId: string, teamId: number, data: {
+    messages: any[];
+    threadId?: string;
+    callbackUrl?: string;
+    config?: any;
+  }): Promise<any> {
+    const response = await this.client.post(`/ai-agents/v1/agents/${agentId}/run/stream`, data, {
+      params: { teamId },
+      responseType: 'stream',
+      headers: { 'Accept': 'text/event-stream' }
+    });
+    return response.data;
+  }
+
+  // ============================================
+  // AI Agents - Context
+  // ============================================
+
+  /**
+   * List AI agent contexts
+   */
+  async getAIAgentContexts(agentId: string, teamId: number): Promise<any> {
+    const response = await this.client.get('/ai-agents/v1/contexts', {
+      params: { agentId, teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Create AI agent context (file upload)
+   */
+  async createAIAgentContext(teamId: number, agentId: string, file: any): Promise<any> {
+    const formData = new FormData();
+    formData.append('agentId', agentId);
+    formData.append('file', file);
+
+    const response = await this.client.post('/ai-agents/v1/contexts', formData, {
+      params: { teamId },
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+  }
+
+  /**
+   * Delete AI agent context
+   */
+  async deleteAIAgentContext(contextId: string, teamId: number): Promise<void> {
+    await this.client.delete(`/ai-agents/v1/contexts/${contextId}`, {
+      params: { teamId }
+    });
+  }
+
+  // ============================================
+  // AI Agents - LLM Providers
+  // ============================================
+
+  /**
+   * List LLM providers
+   */
+  async getLLMProviders(teamId: number): Promise<any> {
+    const response = await this.client.get('/ai-agents/v1/llm-providers', {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Get LLM provider
+   */
+  async getLLMProvider(providerId: number, teamId: number): Promise<any> {
+    const response = await this.client.get(`/ai-agents/v1/llm-providers/${providerId}`, {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * List models for LLM provider
+   */
+  async getLLMProviderModels(providerId: number, teamId: number): Promise<any> {
+    const response = await this.client.get(`/ai-agents/v1/llm-providers/${providerId}/models`, {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  // ============================================
+  // Analytics (Enterprise only)
+  // ============================================
+
+  /**
+   * Get organization analytics
+   */
+  async getAnalytics(organizationId: number, options?: {
+    teamId?: number | number[];
+    folderId?: number | number[];
+    status?: string | string[];
+    dateFrom?: string; // ISO 8601
+    dateTo?: string;
+    sortBy?: string;
+    sortDir?: 'asc' | 'desc';
+    limit?: number;
+    offset?: number;
+    returnTotalCount?: boolean;
+  }): Promise<any> {
+    const params: any = {};
+
+    if (options?.teamId) params.teamId = options.teamId;
+    if (options?.folderId) params.folderId = options.folderId;
+    if (options?.status) params.status = options.status;
+    if (options?.dateFrom) params['timeframe[dateFrom]'] = options.dateFrom;
+    if (options?.dateTo) params['timeframe[dateTo]'] = options.dateTo;
+    if (options?.sortBy) params['pg[sortBy]'] = options.sortBy;
+    if (options?.sortDir) params['pg[sortDir]'] = options.sortDir;
+    if (options?.limit) params['pg[limit]'] = options.limit;
+    if (options?.offset) params['pg[offset]'] = options.offset;
+    if (options?.returnTotalCount) params['pg[returnTotalCount]'] = options.returnTotalCount;
+
+    const response = await this.client.get(`/analytics/${organizationId}`, { params });
+    return response.data;
+  }
+
+  // ============================================
+  // Audit Logs (Enterprise/Teams)
+  // ============================================
+
+  /**
+   * List organization audit logs
+   */
+  async getOrganizationAuditLogs(organizationId: number, options?: {
+    team?: string | number | string[] | number[];
+    dateFrom?: string; // YYYY-MM-DD
+    dateTo?: string;
+    event?: string | string[];
+    author?: string | number | string[] | number[];
+    sortBy?: string;
+    sortDir?: 'asc' | 'desc';
+    limit?: number;
+    offset?: number;
+    returnTotalCount?: boolean;
+  }): Promise<any> {
+    const params: any = {};
+
+    if (options?.team) params.team = options.team;
+    if (options?.dateFrom) params.dateFrom = options.dateFrom;
+    if (options?.dateTo) params.dateTo = options.dateTo;
+    if (options?.event) params.event = options.event;
+    if (options?.author) params.author = options.author;
+    if (options?.sortBy) params['pg[sortBy]'] = options.sortBy;
+    if (options?.sortDir) params['pg[sortDir]'] = options.sortDir;
+    if (options?.limit) params['pg[limit]'] = options.limit;
+    if (options?.offset) params['pg[offset]'] = options.offset;
+    if (options?.returnTotalCount) params['pg[returnTotalCount]'] = options.returnTotalCount;
+
+    const response = await this.client.get(`/audit-logs/organization/${organizationId}`, { params });
+    return response.data;
+  }
+
+  /**
+   * Get organization audit log filters
+   */
+  async getOrganizationAuditLogFilters(organizationId: number): Promise<any> {
+    const response = await this.client.get(`/audit-logs/organization/${organizationId}/filters`);
+    return response.data;
+  }
+
+  /**
+   * List team audit logs
+   */
+  async getTeamAuditLogs(teamId: number, options?: {
+    dateFrom?: string;
+    dateTo?: string;
+    event?: string | string[];
+    author?: string | number | string[] | number[];
+    sortBy?: string;
+    sortDir?: 'asc' | 'desc';
+    limit?: number;
+    offset?: number;
+    returnTotalCount?: boolean;
+  }): Promise<any> {
+    const params: any = {};
+
+    if (options?.dateFrom) params.dateFrom = options.dateFrom;
+    if (options?.dateTo) params.dateTo = options.dateTo;
+    if (options?.event) params.event = options.event;
+    if (options?.author) params.author = options.author;
+    if (options?.sortBy) params['pg[sortBy]'] = options.sortBy;
+    if (options?.sortDir) params['pg[sortDir]'] = options.sortDir;
+    if (options?.limit) params['pg[limit]'] = options.limit;
+    if (options?.offset) params['pg[offset]'] = options.offset;
+    if (options?.returnTotalCount) params['pg[returnTotalCount]'] = options.returnTotalCount;
+
+    const response = await this.client.get(`/audit-logs/team/${teamId}`, { params });
+    return response.data;
+  }
+
+  /**
+   * Get team audit log filters
+   */
+  async getTeamAuditLogFilters(teamId: number): Promise<any> {
+    const response = await this.client.get(`/audit-logs/team/${teamId}/filters`);
+    return response.data;
+  }
 }
