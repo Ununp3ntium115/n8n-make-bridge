@@ -1170,4 +1170,210 @@ export class MakeClient {
     const response = await this.client.get(`/audit-logs/team/${teamId}/filters`);
     return response.data;
   }
+
+  // ============================================
+  // Cashier (Billing/Products)
+  // ============================================
+
+  /**
+   * Get list of cashier products
+   */
+  async getCashierProducts(options?: {
+    type?: 'PLAN' | 'EXTRA';
+    includeInvisible?: boolean;
+    relatedPriceId?: number;
+    organizationId?: number;
+  }): Promise<any> {
+    const params: any = {};
+    if (options?.type) params.type = options.type;
+    if (options?.includeInvisible !== undefined) params.includeInvisible = options.includeInvisible;
+    if (options?.relatedPriceId) params.relatedPriceId = options.relatedPriceId;
+    if (options?.organizationId) params.organizationId = options.organizationId;
+
+    const response = await this.client.get('/cashier/products', { params });
+    return response.data;
+  }
+
+  /**
+   * Get price detail
+   */
+  async getCashierPrice(priceId: number): Promise<any> {
+    const response = await this.client.get(`/cashier/prices/${priceId}`);
+    return response.data;
+  }
+
+  // ============================================
+  // Connections (Enhanced)
+  // ============================================
+
+  /**
+   * List updatable connection parameters
+   */
+  async getConnectionEditableSchema(connectionId: number): Promise<any> {
+    const response = await this.client.get(`/connections/${connectionId}/editable-data-schema`);
+    return response.data;
+  }
+
+  /**
+   * Update connection data
+   */
+  async setConnectionData(connectionId: number, data: any): Promise<any> {
+    const response = await this.client.post(`/connections/${connectionId}/set-data`, data);
+    return response.data;
+  }
+
+  /**
+   * Verify if connection is scoped
+   */
+  async isConnectionScoped(connectionId: number, scope: string[]): Promise<any> {
+    const response = await this.client.post(`/connections/${connectionId}/scoped`, { scope });
+    return response.data;
+  }
+
+  // ============================================
+  // Custom Properties
+  // ============================================
+
+  /**
+   * List custom property structures
+   */
+  async getCustomPropertyStructures(organizationId: number): Promise<any> {
+    const response = await this.client.get('/custom-property-structures', {
+      params: { organizationId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Create custom property structure
+   */
+  async createCustomPropertyStructure(data: {
+    associatedType: string;
+    belongerType: string;
+    belongerId: number;
+  }): Promise<any> {
+    const response = await this.client.post('/custom-property-structures', data);
+    return response.data;
+  }
+
+  /**
+   * List custom property structure items
+   */
+  async getCustomPropertyStructureItems(
+    customPropertyStructureId: number,
+    options?: {
+      sortBy?: string;
+      sortDir?: 'asc' | 'desc';
+      limit?: number;
+      offset?: number;
+    }
+  ): Promise<any> {
+    const params: any = {};
+    if (options?.sortBy) params['pg[sortBy]'] = options.sortBy;
+    if (options?.sortDir) params['pg[sortDir]'] = options.sortDir;
+    if (options?.limit) params['pg[limit]'] = options.limit;
+    if (options?.offset) params['pg[offset]'] = options.offset;
+
+    const response = await this.client.get(
+      `/custom-property-structures/${customPropertyStructureId}/custom-property-structure-items`,
+      { params }
+    );
+    return response.data;
+  }
+
+  /**
+   * Create custom property structure item
+   */
+  async createCustomPropertyStructureItem(
+    customPropertyStructureId: number,
+    data: {
+      name: string;
+      label: string;
+      description: string;
+      type: 'boolean' | 'number' | 'shortText' | 'longText' | 'date' | 'dropdown' | 'multiselect';
+      options?: any;
+      required?: boolean;
+    }
+  ): Promise<any> {
+    const response = await this.client.post(
+      `/custom-property-structures/${customPropertyStructureId}/custom-property-structure-items`,
+      data
+    );
+    return response.data;
+  }
+
+  /**
+   * Delete custom property structure item
+   */
+  async deleteCustomPropertyStructureItem(
+    customPropertyStructureItemId: number,
+    confirmed: boolean = false
+  ): Promise<any> {
+    const response = await this.client.delete(
+      `/custom-property-structures/custom-property-structure-items/${customPropertyStructureItemId}`,
+      { params: { confirmed } }
+    );
+    return response.data;
+  }
+
+  /**
+   * Update custom property structure item
+   */
+  async updateCustomPropertyStructureItem(
+    customPropertyStructureItemId: number,
+    data: {
+      label?: string;
+      description?: string;
+      options?: any;
+      required?: boolean;
+    }
+  ): Promise<any> {
+    const response = await this.client.patch(
+      `/custom-property-structures/custom-property-structure-items/${customPropertyStructureItemId}`,
+      data
+    );
+    return response.data;
+  }
+
+  // ============================================
+  // Data Stores (Enhanced)
+  // ============================================
+
+  /**
+   * Delete multiple data stores
+   */
+  async deleteDataStores(
+    teamId: number,
+    ids: number[],
+    confirmed: boolean = false
+  ): Promise<any> {
+    const response = await this.client.delete('/data-stores', {
+      params: { teamId, confirmed },
+      data: { ids }
+    });
+    return response.data;
+  }
+
+  /**
+   * Get data store details
+   */
+  async getDataStore(dataStoreId: number): Promise<any> {
+    const response = await this.client.get(`/data-stores/${dataStoreId}`);
+    return response.data;
+  }
+
+  /**
+   * Update data store
+   */
+  async updateDataStore(
+    dataStoreId: number,
+    data: {
+      name?: string;
+      datastructureId?: number;
+      maxSizeMB?: number;
+    }
+  ): Promise<any> {
+    const response = await this.client.patch(`/data-stores/${dataStoreId}`, data);
+    return response.data;
+  }
 }
