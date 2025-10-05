@@ -290,7 +290,8 @@ class WorkflowCLI {
       const result = await this.modifier.modifyN8nWorkflow(workflow, instructions);
 
       if (result.success && result.data) {
-        console.log(`\n✅ Modified: ${result.data.name} (${result.data.nodes.length} nodes)`);
+        const modifiedWorkflow = result.data as any;
+        console.log(`\n✅ Modified: ${result.data.name} (${modifiedWorkflow.nodes?.length || 0} nodes)`);
 
         if (result.warnings) {
           console.log(`\n⚠️  Warnings:`);
