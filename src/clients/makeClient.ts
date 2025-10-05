@@ -1376,4 +1376,329 @@ export class MakeClient {
     const response = await this.client.patch(`/data-stores/${dataStoreId}`, data);
     return response.data;
   }
+
+  // ============================================
+  // Scenarios - Consumptions
+  // ============================================
+
+  /**
+   * List scenario consumptions
+   */
+  async getScenarioConsumptions(options?: {
+    teamId?: number;
+    organizationId?: number;
+  }): Promise<any> {
+    const params: any = {};
+    if (options?.teamId) params.teamId = options.teamId;
+    if (options?.organizationId) params.organizationId = options.organizationId;
+
+    const response = await this.client.get('/scenarios/consumptions', { params });
+    return response.data;
+  }
+
+  // ============================================
+  // Scenarios - Tools
+  // ============================================
+
+  /**
+   * Update tool configuration
+   */
+  async updateTool(scenarioId: number, data: {
+    name?: string;
+    description?: string;
+    inputs?: any[];
+    moduleType?: string;
+    module?: any;
+  }): Promise<any> {
+    const response = await this.client.patch(`/scenarios/tools/${scenarioId}`, data);
+    return response.data;
+  }
+
+  // ============================================
+  // Scenarios - Custom Properties Data
+  // ============================================
+
+  /**
+   * Get custom properties data for scenario
+   */
+  async getScenarioCustomProperties(scenarioId: number): Promise<any> {
+    const response = await this.client.get(`/scenarios/${scenarioId}/custom-properties`);
+    return response.data;
+  }
+
+  /**
+   * Fill in custom properties data (first time)
+   */
+  async createScenarioCustomProperties(scenarioId: number, data: any): Promise<any> {
+    const response = await this.client.post(`/scenarios/${scenarioId}/custom-properties`, data);
+    return response.data;
+  }
+
+  /**
+   * Set custom properties (replace all)
+   */
+  async setScenarioCustomProperties(scenarioId: number, data: any): Promise<any> {
+    const response = await this.client.put(`/scenarios/${scenarioId}/custom-properties`, data);
+    return response.data;
+  }
+
+  /**
+   * Update custom properties (partial update)
+   */
+  async updateScenarioCustomProperties(scenarioId: number, data: any): Promise<any> {
+    const response = await this.client.patch(`/scenarios/${scenarioId}/custom-properties`, data);
+    return response.data;
+  }
+
+  /**
+   * Delete custom properties data
+   */
+  async deleteScenarioCustomProperties(scenarioId: number, confirmed: boolean = false): Promise<any> {
+    const response = await this.client.delete(`/scenarios/${scenarioId}/custom-properties`, {
+      params: { confirmed }
+    });
+    return response.data;
+  }
+
+  // ============================================
+  // Scenario Folders
+  // ============================================
+
+  /**
+   * List scenario folders
+   */
+  async getScenarioFolders(teamId: number): Promise<any> {
+    const response = await this.client.get('/scenarios-folders', {
+      params: { teamId }
+    });
+    return response.data;
+  }
+
+  /**
+   * Create scenario folder
+   */
+  async createScenarioFolder(name: string, teamId: number): Promise<any> {
+    const response = await this.client.post('/scenarios-folders', { name, teamId });
+    return response.data;
+  }
+
+  /**
+   * Delete scenario folder
+   */
+  async deleteScenarioFolder(folderId: number): Promise<any> {
+    const response = await this.client.delete(`/scenarios-folders/${folderId}`);
+    return response.data;
+  }
+
+  /**
+   * Update scenario folder
+   */
+  async updateScenarioFolder(folderId: number, name: string): Promise<any> {
+    const response = await this.client.patch(`/scenarios-folders/${folderId}`, { name });
+    return response.data;
+  }
+
+  // ============================================
+  // SDK Apps
+  // ============================================
+
+  /**
+   * List SDK apps
+   */
+  async getSDKApps(all: boolean = false): Promise<any> {
+    const response = await this.client.get('/sdk/apps', {
+      params: { all }
+    });
+    return response.data;
+  }
+
+  /**
+   * Create SDK app
+   */
+  async createSDKApp(app: any): Promise<any> {
+    const response = await this.client.post('/sdk/apps', { app });
+    return response.data;
+  }
+
+  /**
+   * Get SDK app
+   */
+  async getSDKApp(appName: string, appVersion: number, options?: {
+    all?: boolean;
+    opensource?: boolean;
+  }): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}`, {
+      params: options
+    });
+    return response.data;
+  }
+
+  /**
+   * Delete SDK app
+   */
+  async deleteSDKApp(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.delete(`/sdk/apps/${appName}/${appVersion}`);
+    return response.data;
+  }
+
+  /**
+   * Update SDK app
+   */
+  async updateSDKApp(appName: string, appVersion: number, data: any): Promise<any> {
+    const response = await this.client.patch(`/sdk/apps/${appName}/${appVersion}`, data);
+    return response.data;
+  }
+
+  /**
+   * Clone SDK app
+   */
+  async cloneSDKApp(appName: string, appVersion: number, newName: string, newVersion: number): Promise<any> {
+    const response = await this.client.post(`/sdk/apps/${appName}/${appVersion}/clone`, {
+      newName,
+      newVersion
+    });
+    return response.data;
+  }
+
+  /**
+   * Get SDK app review
+   */
+  async getSDKAppReview(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}/review`);
+    return response.data;
+  }
+
+  /**
+   * Request SDK app review
+   */
+  async requestSDKAppReview(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.post(`/sdk/apps/${appName}/${appVersion}/review`);
+    return response.data;
+  }
+
+  /**
+   * Get SDK app review form
+   */
+  async getSDKAppReviewForm(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}/review/form`);
+    return response.data;
+  }
+
+  /**
+   * Submit SDK app review form
+   */
+  async submitSDKAppReviewForm(appName: string, appVersion: number, data: any): Promise<any> {
+    const response = await this.client.put(`/sdk/apps/${appName}/${appVersion}/review/form`, data);
+    return response.data;
+  }
+
+  /**
+   * Get SDK app events log
+   */
+  async getSDKAppEventsLog(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}/events-log`);
+    return response.data;
+  }
+
+  /**
+   * Get SDK app common data (client ID and secret)
+   */
+  async getSDKAppCommon(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}/common`);
+    return response.data;
+  }
+
+  /**
+   * Set SDK app common data
+   */
+  async setSDKAppCommon(appName: string, appVersion: number, data: any): Promise<any> {
+    const response = await this.client.put(`/sdk/apps/${appName}/${appVersion}/common`, data);
+    return response.data;
+  }
+
+  /**
+   * Get SDK app documentation
+   */
+  async getSDKAppDocs(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}/readme`);
+    return response.data;
+  }
+
+  /**
+   * Set SDK app documentation
+   */
+  async setSDKAppDocs(appName: string, appVersion: number, markdown: string): Promise<any> {
+    const response = await this.client.put(`/sdk/apps/${appName}/${appVersion}/readme`, markdown, {
+      headers: { 'Content-Type': 'text/markdown' }
+    });
+    return response.data;
+  }
+
+  /**
+   * Set SDK app base configuration
+   */
+  async setSDKAppBase(appName: string, appVersion: number, config: any): Promise<any> {
+    const response = await this.client.post(`/sdk/apps/${appName}/${appVersion}/base`, config, {
+      headers: { 'Content-Type': 'application/jsonc' }
+    });
+    return response.data;
+  }
+
+  /**
+   * Patch SDK app base configuration
+   */
+  async patchSDKAppBase(appName: string, appVersion: number, config: any): Promise<any> {
+    const response = await this.client.patch(`/sdk/apps/${appName}/${appVersion}/base`, config, {
+      headers: { 'Content-Type': 'application/jsonc' }
+    });
+    return response.data;
+  }
+
+  /**
+   * Commit SDK app changes
+   */
+  async commitSDKAppChanges(appName: string, appVersion: number, data: {
+    message: string;
+    notify?: boolean;
+    changeIds?: number[];
+  }): Promise<any> {
+    const response = await this.client.post(`/sdk/apps/${appName}/${appVersion}/commit`, data);
+    return response.data;
+  }
+
+  /**
+   * Rollback SDK app changes
+   */
+  async rollbackSDKAppChanges(appName: string, appVersion: number): Promise<any> {
+    const response = await this.client.post(`/sdk/apps/${appName}/${appVersion}/rollback`);
+    return response.data;
+  }
+
+  /**
+   * Get SDK app logo
+   */
+  async getSDKAppLogo(appName: string, appVersion: number, size: string): Promise<any> {
+    const response = await this.client.get(`/sdk/apps/${appName}/${appVersion}/icon/${size}`);
+    return response.data;
+  }
+
+  /**
+   * Set SDK app logo
+   */
+  async setSDKAppLogo(appName: string, appVersion: number, icon: any): Promise<any> {
+    const response = await this.client.put(`/sdk/apps/${appName}/${appVersion}/icon`, icon, {
+      headers: { 'Content-Type': 'image/svg+xml' }
+    });
+    return response.data;
+  }
+
+  /**
+   * Uninstall SDK app from organization
+   */
+  async uninstallSDKApp(appName: string, appVersion: number, organizationId: number): Promise<any> {
+    const response = await this.client.post(`/sdk/apps/${appName}/${appVersion}/uninstall`, {
+      organizationId
+    });
+    return response.data;
+  }
 }
