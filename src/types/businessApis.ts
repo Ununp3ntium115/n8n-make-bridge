@@ -7,8 +7,10 @@ export interface ApiMapping {
   name: string;
   n8nNodeType: string;
   makeModuleType: string;
-  category: 'communication' | 'productivity' | 'ai' | 'crm' | 'ecommerce' | 'finance' | 'storage' | 'database';
+  category: 'communication' | 'productivity' | 'ai' | 'crm' | 'ecommerce' | 'finance' | 'storage' | 'database' | 'infrastructure' | 'hosting';
   commonOperations: string[];
+  authHeader?: string; // For custom auth headers like "Authorization: Bearer"
+  baseUrl?: string; // Base URL for the API
 }
 
 export const BUSINESS_API_MAPPINGS: Record<string, ApiMapping> = {
@@ -249,6 +251,59 @@ export const BUSINESS_API_MAPPINGS: Record<string, ApiMapping> = {
     makeModuleType: 'gitlab',
     category: 'productivity',
     commonOperations: ['create_issue', 'create_merge_request', 'create_project'],
+  },
+
+  // Hosting & Infrastructure
+  'hostinger': {
+    name: 'Hostinger VPS',
+    n8nNodeType: 'n8n-nodes-base.httpRequest',
+    makeModuleType: 'http',
+    category: 'hosting',
+    baseUrl: 'https://developers.hostinger.com/api/vps/v1',
+    authHeader: 'Bearer',
+    commonOperations: ['list_vms', 'get_vm', 'create_vm', 'delete_vm', 'start_vm', 'stop_vm', 'reboot_vm'],
+  },
+  'digitalocean': {
+    name: 'DigitalOcean',
+    n8nNodeType: 'n8n-nodes-base.digitalOcean',
+    makeModuleType: 'digitalocean',
+    category: 'hosting',
+    authHeader: 'Bearer',
+    commonOperations: ['create_droplet', 'delete_droplet', 'list_droplets', 'snapshot'],
+  },
+  'aws_ec2': {
+    name: 'AWS EC2',
+    n8nNodeType: 'n8n-nodes-base.awsEc2',
+    makeModuleType: 'aws.ec2',
+    category: 'infrastructure',
+    commonOperations: ['create_instance', 'stop_instance', 'start_instance', 'terminate_instance'],
+  },
+  'linode': {
+    name: 'Linode',
+    n8nNodeType: 'n8n-nodes-base.httpRequest',
+    makeModuleType: 'http',
+    category: 'hosting',
+    baseUrl: 'https://api.linode.com/v4',
+    authHeader: 'Bearer',
+    commonOperations: ['create_linode', 'boot_linode', 'shutdown_linode', 'delete_linode'],
+  },
+  'vultr': {
+    name: 'Vultr',
+    n8nNodeType: 'n8n-nodes-base.httpRequest',
+    makeModuleType: 'http',
+    category: 'hosting',
+    baseUrl: 'https://api.vultr.com/v2',
+    authHeader: 'Bearer',
+    commonOperations: ['create_instance', 'list_instances', 'delete_instance', 'restart_instance'],
+  },
+  'cloudflare': {
+    name: 'Cloudflare',
+    n8nNodeType: 'n8n-nodes-base.httpRequest',
+    makeModuleType: 'cloudflare',
+    category: 'infrastructure',
+    baseUrl: 'https://api.cloudflare.com/client/v4',
+    authHeader: 'Bearer',
+    commonOperations: ['list_zones', 'purge_cache', 'create_dns_record', 'update_dns_record'],
   },
 
   // Generic HTTP
